@@ -1,21 +1,28 @@
-coverage_perc = 90
-
 ## help: Show this help.
 .PHONY: help
 help: Makefile
 	@sed -n 's/^##\s//p' $<
 
+## install: Install non-dev requirements.
+.PHONY: install-req
+install-req:
+	@pip install -U -r requirements.txt
+
+## install: Install dev requirements.
+.PHONY: install-dev-req
+install-dev-req:
+	@pip install -U -r requirements-dev.txt
+
 ## install: Install all requirements.
 .PHONY: install
-install:
-	@pip install -U -r requirements.txt
-	@pip install -U -r requirements-extra.txt
+install: install-req install-dev-req
 
 ## lint: Run linter
 .PHONY: lint
 lint:
 	@flake8
 	@isort --check .
+	@black --check .
 
 ## test: Run tests and prepare coverage
 .PHONY: test
